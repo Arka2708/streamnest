@@ -24,7 +24,7 @@ const upload = multer({
 
 app.use(
     cors({
-        origin: ["http://localhost:3000"],
+        origin: ["http://localhost:8000"," http://localhost:5173"],
         credentials: true,
     })
 )
@@ -57,7 +57,7 @@ app.post("/upload", upload.single("file"),
     //ffmpeg
     // command to convert video to HLS format using ffmpeg
 
-  const ffmpegCommand = `ffmpeg -i ${videoPath} -codec:v libx264 -codec:a aac -hls_time 10 -hls_playlist_type vod -hls_segment_filename "${outputPath}/segment%03d.ts" -start_number 0 ${hlsPath}`;
+  const ffmpegCommand = `ffmpeg -i ${videoPath} -codec:v libx264 -codec:a aac -hls_time 20 -hls_playlist_type vod -hls_segment_filename "${outputPath}/segment%03d.ts" -start_number 0 ${hlsPath}`;
 
    // usually done in a separate process (queued),but not here
   exec(ffmpegCommand, (error, stdout, stderr) => {
@@ -67,7 +67,7 @@ app.post("/upload", upload.single("file"),
     }
     console.log(`stdout: ${stdout}`);
     console.log(`stderr: ${stderr}`);
-    const videoUrl = `http://localhost:3000/uploads/series/${lessonId}/index.m3u8`;
+    const videoUrl = `http://localhost:8000/uploads/series/${lessonId}/index.m3u8`;
     res.json({
       message: "Video converted to HLS format",
       videoUrl: videoUrl,
